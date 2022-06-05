@@ -1,0 +1,45 @@
+﻿@page "/"
+
+<PageTitle>Moogle!</PageTitle>
+
+<div id="content">
+    <h1 class="d-flex logo justify-content-center my-5"><span style="color: rgb(19, 75, 219);">M</span><span style="color: crimson;">o</span><span style="color: goldenrod;">o</span><span style="color: rgb(19, 75, 219);">g</span><span style="color: forestgreen;">l</span><div style="transform: rotate(-15deg);color: crimson;">e</div>!</h1>
+
+    <div class="d-flex justify-content-center">
+        <input class="my-auto form-control mx-1" @bind="query" placeholder="Introduzca su búsqueda" style="width: 40%;" id="search-input">
+        <div class="mx-0 my-0 px-0 py-0" id="search-btn">
+            <button type="default" class="btn btn-primary my-auto mx-1" @onclick="RunQuery">Buscar</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(result.Suggestion)) {
+        <div class="suggestion my-2 py-auto">
+            <p>¿Quisite decir <strong><a href="#" @onclick="RunSuggestedQuery">@result.Suggestion</a></strong>?</p>
+        </div>
+    }
+
+    <ul class="results list-group container mt-2 mb-4" id="search-results" >
+    @foreach (var item in result.Items()) {
+        <li class="list-group-item">
+            <div>
+                <p class="title">@item.Title</p>
+                <p>... @((MarkupString)item.Snippet) ...</p>
+            </div>
+        </li>
+    }
+    </ul>
+</div>
+
+@code {
+    private string query = "";
+    private SearchResult result = new SearchResult();
+
+    private void RunQuery() {
+        result = Moogle.Query(query);
+    }
+
+    private void RunSuggestedQuery(){
+        query = result.Suggestion;
+        RunQuery();
+    }
+}

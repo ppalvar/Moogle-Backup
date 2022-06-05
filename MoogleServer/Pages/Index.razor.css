@@ -1,0 +1,14 @@
+.results {
+    text-align: left;
+}
+
+.item .title {
+    font-size: large;
+    font-weight: bold;
+}
+
+.logo{
+    font-size: 5.6rem;
+    font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
