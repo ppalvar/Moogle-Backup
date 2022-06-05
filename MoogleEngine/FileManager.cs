@@ -37,11 +37,13 @@ internal class FileManager{
 
     public FileManager(string docName){//constructor de la clase
         this.DocName = docName;
-        this.content = File.ReadAllText(docName).ToLower();totalDocCount++;
+        this.content = File.ReadAllText(docName);totalDocCount++;
 
-        string[] docWords = this.content.Split(FileSettings.splitChars, StringSplitOptions.RemoveEmptyEntries);
+        string contentCopy = this.content.ToLower();Tools.RemoveSpanishChars(ref contentCopy);
 
-        Tools.RemoveSpanishChars(ref this.content);
+        string[] docWords = contentCopy.Split(FileSettings.splitChars, StringSplitOptions.RemoveEmptyEntries);
+
+        
         ConvertToVector(ref docWords);
     }
 
@@ -75,7 +77,7 @@ internal class FileManager{
 
             x += p.Value * this.tf_idf[p.Key];
             y += p.Value * p.Value;
-            z += tf_idf[p.Key] * this.tf_idf[p.Key];
+            z += this.tf_idf[p.Key] * this.tf_idf[p.Key];
 
             //multiplicar el valor de la palabra por la 2 elevado a la cantidad de '*' que tiene mas uno
             //asi si no tiene ninguno su valor se mantiene
@@ -185,15 +187,13 @@ internal class FileManager{
         Dictionary <string, double> queryTf_idf = new Dictionary<string, double>();
 
         foreach (var p in wordCounter){
-            if (!this.wordCounter.ContainsKey(p.Key)){
-                queryTf_idf[p.Key] = 0.0;
-                continue;
-            }
+            int amountInDocs = 0;
+            if (docCorpusWordCounter.ContainsKey(p.Key))amountInDocs = docCorpusWordCounter[p.Key];
 
             double tf = ((double) p.Value + 1) / ((double) totalWords + 1);
-            double idf = Math.Log(( (double) totalDocCount + 1) / ((double) docCorpusWordCounter[p.Key] + 1) + 1.0);
+            double idf = Math.Log(( (double) totalDocCount + 1.0) / ((double) amountInDocs + 1.0));
 
-            queryTf_idf[p.Key] = tf * idf;
+            queryTf_idf.Add(p.Key, tf * idf);
         }
 
         return queryTf_idf;
@@ -214,7 +214,8 @@ internal class FileManager{
         }
 
         foreach (var p in wordCounter){//ahora solo se calcula el tf, el idf se calcula mas tarde con el metodo Normalize
-            this.tf_idf[p.Key] = ((double) this.wordCounter[p.Key] + 1) / ((double) this.totalWords + 1);
+            this.tf_idf[p.Key] = ((double) this.wordCounter[p.Key]) / ((double) this.totalWords + 1);
+            if (p.Key == "japon")Console.WriteLine(tf_idf[p.Key]);
             //los 1 sumados son para equilibrar la formula y para evitar divisiones por cero respectivamente
         }
     }
