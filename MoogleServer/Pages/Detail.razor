@@ -1,0 +1,22 @@
+@page "/detail/{docName}"
+
+<PageTitle>Moogle!</PageTitle>
+
+<div id="content" >
+    <h1 class="d-flex logo justify-content-center my-5"><span style="color: rgb(19, 75, 219);">M</span><span style="color: crimson;">o</span><span style="color: goldenrod;">o</span><span style="color: rgb(19, 75, 219);">g</span><span style="color: forestgreen;">l</span><div style="transform: rotate(-15deg);color: crimson;">e</div>!</h1>
+    <div class="px-auto">
+        <h3 class="px-auto my-3">@DocName</h3>
+        <p class="px-auto mx-auto">... @((MarkupString)content) ...</p>
+    </div>
+</div>
+
+@code{
+    public string content = "";
+    protected override void OnInitialized(){
+        if (DocName is null) return;
+        content = Moogle.Detail(DocName);
+    }
+
+    [Parameter]
+    public string? DocName{get;set;}
+}

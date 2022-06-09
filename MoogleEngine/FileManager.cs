@@ -12,6 +12,7 @@ internal class FileManager{
     */
     private Dictionary <string, double> tf_idf = new Dictionary<string, double>();
     public string DocName{get;private set;}
+    public string[] Query{get;private set;}//guardar la ultima query realizada, por defecto guarda {"hola"}
     public string NameAsTitle{//obtener el nombre del documento en un formato presentable al usuario
         get{
             string[] tmp = this.DocName.Split("/");
@@ -36,6 +37,7 @@ internal class FileManager{
     }
 
     public FileManager(string docName){//constructor de la clase
+        this.Query = new string[] {"hola"};
         this.DocName = docName;
         this.content = File.ReadAllText(docName);totalDocCount++;
 
@@ -57,6 +59,8 @@ internal class FileManager{
 
     public double GetVectorialDistance(ref string[] queryItems, ref string _query){
         //calcula el coseno entre el vector de la query y el vector del documento
+
+        this.Query = queryItems;
 
         double x = 0;
         double y = 0;
@@ -101,9 +105,14 @@ internal class FileManager{
         return shouldHide? 0.0 : x / (Math.Sqrt(y) * Math.Sqrt(z) + 1.0);
     }
 
-    public string GetSnippet(ref string[] query){
+    public string GetFullLengthSnippet(){
+        //retorna un snippet de mayor longitud
+        string[] query = this.Query;
+        return GetSnippet(ref query, Math.Min(10000,this.content.Length));//10000 es el maximo numero de caracteres permitidos para evitar cargar archivos muy grandes
+    }
+
+    public string GetSnippet(ref string[] query, int SnippetLength = 500){
         #region SearchBestSnippet
-        int SnippetLength = 500;
 
         //indices donde aparece la primera letra de las palabras de la query en este documento
         List <int> indexes = Tools.GetAppearingIndexes(ref this.content, ref query);

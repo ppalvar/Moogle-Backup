@@ -86,4 +86,11 @@ public static class FileLoader{
 
         return new SearchResult(result, suggestion);
     }
+
+    public static string GetDetail(string docName){
+        //retorna un snippet relativamente largo de un documento
+        foreach (FileManager f in allFiles){
+            if (f.NameAsTitle == docName)return f.GetFullLengthSnippet();
+        }return "";
+    }
 }

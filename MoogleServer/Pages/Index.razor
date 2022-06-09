@@ -20,12 +20,14 @@
 
     <ul class="results list-group container mt-2 mb-4" id="search-results" >
     @foreach (var item in result.Items()) {
-        <li class="list-group-item">
-            <div>
-                <p class="title">@item.Title</p>
-                <p>... @((MarkupString)item.Snippet) ...</p>
-            </div>
-        </li>
+        <a href="/detail/@item.Title">
+            <li class="list-group-item">
+                <div>
+                    <h5 class="title">@item.Title</h5>
+                    <p>... @((MarkupString)item.Snippet) ...</p>
+                </div>
+            </li>
+        </a>
     }
     </ul>
 </div>
