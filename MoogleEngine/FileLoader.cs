@@ -53,7 +53,7 @@ public static class FileLoader{
         List <SearchItem> tmp = new List<SearchItem>();
 
         //valor que fija la minima importancia que debe tener un documento para ser tenido en cuenta
-        const double epsylon = 0.001;
+        const double epsylon = 0.0000001;
 
         foreach (FileManager file in allFiles){
             double value = file.GetVectorialDistance(ref searchTerms, ref query);

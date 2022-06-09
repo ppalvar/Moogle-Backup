@@ -108,7 +108,7 @@ internal class FileManager{
     public string GetFullLengthSnippet(){
         //retorna un snippet de mayor longitud
         string[] query = this.Query;
-        return GetSnippet(ref query, Math.Min(10000,this.content.Length));//10000 es el maximo numero de caracteres permitidos para evitar cargar archivos muy grandes
+        return GetSnippet(ref query, Math.Min(50000,this.content.Length));//10000 es el maximo numero de caracteres permitidos para evitar cargar archivos muy grandes
     }
 
     public string GetSnippet(ref string[] query, int SnippetLength = 500){
@@ -224,7 +224,6 @@ internal class FileManager{
 
         foreach (var p in wordCounter){//ahora solo se calcula el tf, el idf se calcula mas tarde con el metodo Normalize
             this.tf_idf[p.Key] = ((double) this.wordCounter[p.Key]) / ((double) this.totalWords + 1);
-            if (p.Key == "japon")Console.WriteLine(tf_idf[p.Key]);
             //los 1 sumados son para equilibrar la formula y para evitar divisiones por cero respectivamente
         }
     }
