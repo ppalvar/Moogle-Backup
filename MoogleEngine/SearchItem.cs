@@ -1,10 +1,5 @@
 namespace MoogleEngine;
 
-public class MyList<T>
-{
-
-}
-
 public class SearchItem : IComparable<SearchItem>
 {
     public SearchItem(string title, string snippet, float score)
